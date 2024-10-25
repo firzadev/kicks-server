@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { index, unique } from "drizzle-orm/sqlite-core";
+import { index, int, unique } from "drizzle-orm/sqlite-core";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
@@ -8,6 +8,20 @@ export const users = sqliteTable("users", {
   username: text("username").notNull(),
   email: text("email").notNull(),
   password: text("password"),
+  createdAt: text("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const refreshToken = sqliteTable("refresh_tokens", {
+  id: integer("id").primaryKey().notNull(),
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
+  token: text("token").notNull(),
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
