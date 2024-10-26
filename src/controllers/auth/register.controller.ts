@@ -11,7 +11,7 @@ export const registerController = async (req: Request, res: Response) => {
       email,
       password,
     });
-    res.status(201).send("Success to create new user.").json(newUser);
+    res.status(201).send("Success to create new user.");
   } catch (error) {
     console.log(error);
     res.status(400).send("Failed to create user.");
